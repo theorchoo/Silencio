@@ -1,6 +1,8 @@
 package com.notifismart.silencio;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -47,9 +49,41 @@ public class MainActivity extends Activity {
         askForPermission(Manifest.permission.READ_PHONE_STATE,2);
         askForPermission(Manifest.permission.CALL_PHONE,2);
         askForPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS,2);
-
+        // TODO get notification and call mbuilder.build()
     }
 
+    private NotificationCompat.Builder constantNotification(){
+        // create action buttons to broadcast result (level choosing to be translated to thold)
+        Intent lowIntent = new Intent(this, LevelReceiver.class);
+        PendingIntent lowPIntent = PendingIntent.getBroadcast(this, 0, lowIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action lowAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.low_level), lowPIntent).build();
+
+        Intent medIntent = new Intent(this, LevelReceiver.class);
+        PendingIntent medPIntent = PendingIntent.getBroadcast(this, 0, medIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action medAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.med_level), medPIntent).build();
+
+        Intent highIntent = new Intent(this, LevelReceiver.class);
+        PendingIntent highPIntent = PendingIntent.getBroadcast(this, 0, highIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action highAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.high_level), highPIntent).build();
+
+        Intent offIntent = new Intent(this, LevelReceiver.class);
+        PendingIntent offPIntent = PendingIntent.getBroadcast(this, 0, offIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action offAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.off), offPIntent).build();
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContentTitle("SILENCIO!")
+                        .setContentText("Pick noise filtering level")
+                        .setOngoing(true)
+                        .setPriority(2)
+                        .addAction(lowAction).addAction(medAction).addAction(highAction).addAction(offAction)
+                        .setStyle(new android.support.v7.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0,1,2))
+                ;
+
+//                .setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1, 2));
+        return mBuilder;
+    }
     private void printCalls() {
         TextView textView = (TextView) findViewById(R.id.textView);
         Cursor managedCursor;
@@ -133,7 +167,6 @@ public class MainActivity extends Activity {
             printCalls();
             Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
         }else{
-            Log.i("DENIED",permissions[0]);
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
     }

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Silencio</string>
     <string name="service_name">SilencioService</string>
+    <string name="low_level">1</string>
+    <string name="med_level">2</string>
+    <string name="high_level">3</string>
+    <string name="off">3</string>
 </resources>

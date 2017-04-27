@@ -36,6 +36,7 @@
                 </action>
             </intent-filter>
         </receiver>
+        <receiver android:name=".LevelReceiver" />
 
 
     </application>
