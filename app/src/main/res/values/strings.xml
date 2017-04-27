@@ -4,6 +4,6 @@
     <string name="low_level">1</string>
     <string name="med_level">2</string>
     <string name="high_level">3</string>
-    <string name="off">3</string>
+    <string name="off">0</string>
     <string name="server_client_id">16567659442-9m0ca9g9e3n6sf6cituv09jp2dho3tso.apps.googleusercontent.com</string>
 </resources>

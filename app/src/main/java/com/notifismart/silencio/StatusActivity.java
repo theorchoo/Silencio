@@ -45,7 +45,6 @@ public class StatusActivity extends Activity {
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
-
     private NotificationCompat.Builder constantNotification(){
         // create action buttons to broadcast result (level choosing to be translated to thold)
         Intent lowIntent = new Intent(this, LevelReceiver.class);
