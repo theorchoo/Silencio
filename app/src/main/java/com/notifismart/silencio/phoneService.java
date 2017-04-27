@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -19,7 +20,8 @@ public class phoneService extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        tm.listen(CustomPhoneStateListener,);
+        CustomPhoneStateListener customPhoneStateListener = new CustomPhoneStateListener(context);
+        tm.listen(customPhoneStateListener,PhoneStateListener.LISTEN_CALL_STATE);
         try {
             Class c = Class.forName(tm.getClass().getName());
             Method m = c.getDeclaredMethod("getITelephony");
@@ -36,7 +38,6 @@ public class phoneService extends BroadcastReceiver {
 //                telephonyService.endCall();
 //                Log.d("HANG UP", phoneNumber);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
