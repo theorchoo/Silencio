@@ -35,25 +35,25 @@ public class silService extends NotificationListenerService {
         String title = extras.getString("android.title");
         String text = extras.getCharSequence("android.text").toString();
 //        Log.i("ticker",sbn.getNotification().tickerText.toString());
-        Log.i("app", sbn.getPackageName());
+//        Log.i("app", sbn.getPackageName());
 
         String dateString = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").format(new Date(sbn.getPostTime()));
 
-        Log.i("time", dateString);
-        Log.i("title", title);
-        Log.i("text", text);
-        try {
-            String people[] = extras.getStringArray(Notification.EXTRA_PEOPLE);
-            for (String p : people) {
-                Log.i("person",p);
-            }
-        } catch (Exception e) {}
-
-        try {
-            Log.i("group", notification.getGroup());
-        } catch (Exception e) {}
-
-        Log.i("priority", String.valueOf(sbn.getNotification().priority));
+//        Log.i("time", dateString);
+//        Log.i("title", title);
+//        Log.i("text", text);
+//        try {
+//            String people[] = extras.getStringArray(Notification.EXTRA_PEOPLE);
+//            for (String p : people) {
+//                Log.i("person",p);
+//            }
+//        } catch (Exception e) {}
+//
+//        try {
+//            Log.i("group", notification.getGroup());
+//        } catch (Exception e) {}
+//
+//        Log.i("priority", String.valueOf(sbn.getNotification().priority));
 
         if (text.contains("cool")) {
             cancelNotification(sbn.getKey());

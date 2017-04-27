@@ -42,12 +42,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
-        int permissionCheck = context.checkSelfPermission(Manifest.permission.READ_CALL_LOG);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            printCalls();
-        } else {
-            askForPermission(Manifest.permission.READ_CALL_LOG,1);
-        }
+
+        askForPermission(Manifest.permission.READ_CALL_LOG,1);
+        askForPermission(Manifest.permission.READ_PHONE_STATE,2);
+        askForPermission(Manifest.permission.CALL_PHONE,2);
+        askForPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS,2);
+
     }
 
     private void printCalls() {
@@ -133,6 +133,7 @@ public class MainActivity extends Activity {
             printCalls();
             Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
         }else{
+            Log.i("DENIED",permissions[0]);
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
     }
