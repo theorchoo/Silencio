@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Silencio</string>
     <string name="service_name">SilencioService</string>
-    <string name="low_level">1</string>
-    <string name="med_level">2</string>
-    <string name="high_level">3</string>
-    <string name="off">0</string>
-    <string name="server_client_id">16567659442-9m0ca9g9e3n6sf6cituv09jp2dho3tso.apps.googleusercontent.com</string>
+    <string name="low_level">Low</string>
+    <string name="med_level">Medium</string>
+    <string name="high_level">High</string>
+    <string name="off">OFF</string>
+    <string name="server_client_id">1035698262681-trd8sf2imu42st43sfr5iik21l8nov5o.apps.googleusercontent.com</string>
 </resources>

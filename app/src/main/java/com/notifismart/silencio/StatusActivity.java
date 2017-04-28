@@ -11,10 +11,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-
 import org.json.JSONArray;
+import libsvm.LibSVM;
 
 import java.util.Date;
 
@@ -43,40 +43,75 @@ public class StatusActivity extends Activity {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         // Builds the notification and issues it.
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
+
+        onNewIntent(getIntent());
     }
 
     private NotificationCompat.Builder constantNotification(){
-        // create action buttons to broadcast result (level choosing to be translated to thold)
-        Intent lowIntent = new Intent(this, LevelReceiver.class);
-        PendingIntent lowPIntent = PendingIntent.getBroadcast(this, 0, lowIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action lowAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.low_level), lowPIntent).build();
 
-        Intent medIntent = new Intent(this, LevelReceiver.class);
-        PendingIntent medPIntent = PendingIntent.getBroadcast(this, 0, medIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action medAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.med_level), medPIntent).build();
+//
+//        // create action buttons to broadcast result (level choosing to be translated to thold)
+//        Intent lowIntent = new Intent(this, LevelReceiver.class);
+//        lowIntent.setAction("MSG");
+//        PendingIntent piAction1 = PendingIntent.getService(context, 0, lowIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////        PendingIntent lowPIntent = PendingIntent.getBroadcast(this, 0, lowIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////        NotificationCompat.Action lowAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.low_level), lowPIntent).build();
+//
+//        Intent medIntent = new Intent(this, LevelReceiver.class);
+//        PendingIntent medPIntent = PendingIntent.getBroadcast(this, 0, medIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        NotificationCompat.Action medAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.med_level), medPIntent).build();
 
-        Intent highIntent = new Intent(this, LevelReceiver.class);
-        PendingIntent highPIntent = PendingIntent.getBroadcast(this, 0, highIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action highAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.high_level), highPIntent).build();
+//        Intent highIntent = new Intent(this, LevelReceiver.class);
+//        PendingIntent highPIntent = PendingIntent.getBroadcast(this, 0, highIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        NotificationCompat.Action highAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.high_level), highPIntent).build();
+//
+//        Intent offIntent = new Intent(this, LevelReceiver.class);
+//        PendingIntent offPIntent = PendingIntent.getBroadcast(this, 0, offIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        NotificationCompat.Action offAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.off), offPIntent).build();
 
-        Intent offIntent = new Intent(this, LevelReceiver.class);
-        PendingIntent offPIntent = PendingIntent.getBroadcast(this, 0, offIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action offAction = new NotificationCompat.Action.Builder(R.drawable.ic_highlight_off, getString(R.string.off), offPIntent).build();
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.notification_icon)
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_highlight_off)
                         .setContentTitle("SILENCIO!")
                         .setContentText("Pick noise filtering level")
                         .setOngoing(true)
                         .setPriority(2)
-                        .addAction(lowAction).addAction(medAction).addAction(highAction).addAction(offAction)
-                        .setStyle(new android.support.v7.app.NotificationCompat.MediaStyle().setShowActionsInCompactView(0,1,2))
+//                        .addAction(R.drawable.ic_highlight_off,"abc",piAction1).addAction(medAction).addAction(highAction).addAction(offAction)
                 ;
 
+        Intent low = new Intent();
+        low.setAction("1");
+        PendingIntent pendingIntentLow = PendingIntent.getBroadcast(this, 12345, low, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_highlight_off, "Low", pendingIntentLow);
+
+        Intent medium = new Intent();
+        medium.setAction("2");
+        PendingIntent pendingIntentMedium = PendingIntent.getBroadcast(this, 12345, medium, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_highlight_off, "Medium", pendingIntentMedium);
+
+        Intent high = new Intent();
+        high.setAction("3");
+        PendingIntent pendingIntentHigh = PendingIntent.getBroadcast(this, 12345, high, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_highlight_off, "High", pendingIntentHigh);
+
+        Intent off = new Intent();
+        off.setAction("4");
+        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, 12345, off, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_highlight_off, "OFF", pendingIntentOff);
 //                .setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1, 2));
+        mBuilder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0,1,2,3));
         return mBuilder;
     }
+
+//
+//    @Override
+//    public void onNewIntent(Intent intent){
+//        Log.i("got",intent.getAction());
+//    }
+
+
     private void printCalls(Context context) {
         Cursor managedCursor;
         int permissionCheck = context.checkSelfPermission(android.Manifest.permission.READ_CALL_LOG);

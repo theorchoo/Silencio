@@ -12,6 +12,18 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -39,10 +51,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
+import com.google.api.services.gmail.GmailScopes;
 
 import org.json.JSONArray;
 
@@ -87,8 +102,13 @@ public class MainActivity extends AppCompatActivity implements
         askForPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS,2);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
+                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.labels"))
+                .requestServerAuthCode(getString(R.string.server_client_id), false)
                 .build();
+//
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.server_client_id))
+//                .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
@@ -99,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
+
 
 
     @Override
@@ -172,8 +193,8 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            String idToken = acct.getIdToken();
-            Log.d("TOKEN ###",idToken);
+            String authCode = acct.getServerAuthCode();
+            Log.d("TOKEN ###",authCode);
 
 //            HttpClient httpClient = new DefaultHttpClient();
 //            HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin");
@@ -195,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements
 
             hideProgressDialog();
             Intent intent = new Intent(this, StatusActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, idToken);
+            intent.putExtra(EXTRA_MESSAGE, authCode);
             startActivity(intent);
         }
 
