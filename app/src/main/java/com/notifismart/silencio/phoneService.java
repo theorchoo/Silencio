@@ -16,6 +16,7 @@ import com.android.internal.telephony.ITelephony;
 import java.lang.reflect.Method;
 
 public class phoneService extends BroadcastReceiver {
+    static int threshold = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -35,6 +36,7 @@ public class phoneService extends BroadcastReceiver {
                 telephonyService.silenceRinger();
                 final AudioManager mode = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                 mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                StatusActivity.pushup();
 //                telephonyService.endCall();
 //                Log.d("HANG UP", phoneNumber);
             }
@@ -42,6 +44,11 @@ public class phoneService extends BroadcastReceiver {
             e.printStackTrace();
         }
 
+    }
+
+
+    static public void setThreshold(int t) {
+        threshold = t;
     }
 
     private class CustomPhoneStateListener extends PhoneStateListener {

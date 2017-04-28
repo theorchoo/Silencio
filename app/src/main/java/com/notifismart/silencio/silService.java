@@ -22,11 +22,16 @@ import java.util.Date;
 
 public class silService extends NotificationListenerService {
     Context context;
+    static int threshold = 0;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+    }
+
+    static public void setThreshold(int t) {
+        threshold = t;
     }
 
     @Override
@@ -67,6 +72,7 @@ public class silService extends NotificationListenerService {
 //        if (text.contains("cool")) {
 //            cancelNotification(sbn.getKey());
 //        }
+        StatusActivity.pushup();
     }
 
     @Override

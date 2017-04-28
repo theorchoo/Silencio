@@ -43,11 +43,21 @@ public class LevelReceiver extends BroadcastReceiver {
         String action = intent.getAction();
 
         if("1".equals(action)) {
-            Log.v("shuffTest","Pressed YES");
+            StatusActivity.setThreshold(1);
+            phoneService.setThreshold(1);
+            silService.setThreshold(1);
         } else if("2".equals(action)) {
-            Log.v("shuffTest","Pressed NO");
+            StatusActivity.setThreshold(2);
+            phoneService.setThreshold(2);
+            silService.setThreshold(2);
         } else if("3".equals(action)) {
-            Log.v("shuffTest","Pressed MAYBE");
+            StatusActivity.setThreshold(3);
+            phoneService.setThreshold(3);
+            silService.setThreshold(3);
+        } else if("0".equals(action)) {
+            StatusActivity.setThreshold(0);
+            phoneService.setThreshold(0);
+            silService.setThreshold(0);
         }
 
     }

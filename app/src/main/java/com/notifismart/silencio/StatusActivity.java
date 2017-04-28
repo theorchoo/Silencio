@@ -8,11 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,13 +40,16 @@ public class StatusActivity extends Activity {
     // Instantiate the RequestQueue.
     String url;
     ArrayList<String> message;
-
-
+    static int threshold = 0;
+    static int rejCount = 0;
+    static final double factor = 23.15;
+    static StatusActivity currentActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
+        currentActivity = this;
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
@@ -67,6 +74,26 @@ public class StatusActivity extends Activity {
         onNewIntent(getIntent());
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        currentActivity = this;
+    }
+
+    static public void setThreshold(int t) {
+        threshold = t;
+        TextView tv = (TextView) currentActivity.findViewById(R.id.textView9);
+        tv.setText(String.valueOf(t));
+    }
+
+    static public void pushup() {
+        rejCount++;
+        TextView num = (TextView) currentActivity.findViewById(R.id.textView3);
+        TextView time = (TextView) currentActivity.findViewById(R.id.textView6);
+        num.setText(String.valueOf(rejCount));
+        time.setText(String.valueOf(rejCount * factor).concat(" MIN."));
     }
 
     private NotificationCompat.Builder constantNotification(){
@@ -99,8 +126,8 @@ public class StatusActivity extends Activity {
                         .setContentText("Pick noise filtering level")
                         .setOngoing(true)
                         .setPriority(2)
-//                        .addAction(R.drawable.ic_highlight_off,"abc",piAction1).addAction(medAction).addAction(highAction).addAction(offAction)
-                ;
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launch))
+                        .setSmallIcon(R.drawable.ic_launch);
 
         Intent low = new Intent();
         low.setAction("1");
@@ -121,7 +148,7 @@ public class StatusActivity extends Activity {
         off.setAction("4");
         PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, 12345, off, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.addAction(R.drawable.ic_highlight_off, "OFF", pendingIntentOff);
-//                .setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0, 1, 2));
+
         mBuilder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0,1,2,3));
         return mBuilder;
     }
