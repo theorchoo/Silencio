@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1035698262681",
+    "project_id": "silencio2-166002"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035698262681:android:69caeb66586e4d6a",
+        "android_client_info": {
+          "package_name": "com.notifismart.silencio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035698262681-670fjsqq9jf5l17dthbr87ik2dmpevpf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notifismart.silencio",
+            "certificate_hash": "b96e8775cb6bc730c102cba02c6b548c473dfafe"
+          }
+        },
+        {
+          "client_id": "1035698262681-trd8sf2imu42st43sfr5iik21l8nov5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMeohhd8XMzJ1K50H1lurMyNw_1JTtDjs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

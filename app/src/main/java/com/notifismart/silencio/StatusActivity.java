@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import org.json.JSONArray;
-import libsvm.LibSVM;
 
 import java.util.Date;
 
@@ -166,5 +165,49 @@ public class StatusActivity extends Activity {
             jsonArray_master.put(jsonArray);
         }
         managedCursor.close();
+    }
+
+    public int predict(float[] x, float[][] w) {
+        float final_arr[] = {0,0,0,0};
+
+        int j = 0;
+        for (float[] w_row : w) {
+            int i = 0;
+            for (float w_i : w_row) {
+                final_arr[j] += w_i * x[i];
+                i++;
+            }
+            j++;
+        }
+
+        if (final_arr[0] > final_arr[1]) {
+            if (final_arr[2] > final_arr[3]) {
+                if (final_arr[0] > final_arr[2]) {
+                    return 0;
+                } else {
+                    return 2;
+                }
+            } else {
+                if (final_arr[0] > final_arr[3]) {
+                    return 0;
+                } else {
+                    return 3;
+                }
+            }
+        } else {
+            if (final_arr[2] > final_arr[3]) {
+                if (final_arr[1] > final_arr[2]) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            } else {
+                if (final_arr[1] > final_arr[3]) {
+                    return 1;
+                } else {
+                    return 3;
+                }
+            }
+        }
     }
 }

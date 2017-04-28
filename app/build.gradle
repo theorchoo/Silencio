@@ -42,10 +42,4 @@ dependencies {
     }
     compile 'com.jakewharton:butterknife:6.0.0'
     testCompile 'junit:junit:4.12'
-    compile files('libs/javaml-0.1.7.jar')
-    compile files('libs/Jama-1.0.2.jar')
-    compile files('libs/ajt-2.9.jar')
-    compile files('libs/libsvm.jar')
-    compile files('libs/commons-math-1.2.jar')
-    compile files('libs/weka.jar')
 }
