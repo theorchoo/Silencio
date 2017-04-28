@@ -13,13 +13,31 @@ import android.provider.CallLog;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import org.json.JSONArray;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.api.client.http.HttpResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class StatusActivity extends Activity {
     Context context;
+    RequestQueue queue;
+    // Instantiate the RequestQueue.
+    String url;
+    ArrayList<String> message;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,9 +46,11 @@ public class StatusActivity extends Activity {
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        message = intent.getStringArrayListExtra("GMAIL");
 
-        Log.i("new token",message);
+        url = "http://10.10.17.210:5000/";
+        queue = Volley.newRequestQueue(this);
+
         context = getApplicationContext();
         printCalls(context);
 
@@ -45,6 +65,8 @@ public class StatusActivity extends Activity {
 
 
         onNewIntent(getIntent());
+
+
     }
 
     private NotificationCompat.Builder constantNotification(){
@@ -165,10 +187,36 @@ public class StatusActivity extends Activity {
             jsonArray_master.put(jsonArray);
         }
         managedCursor.close();
+        JSONObject toSend = new JSONObject();
+        try {
+            toSend.put("calls",jsonArray_master);
+            toSend.put("gmail",message);
+        } catch (Exception e) {
+
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, toSend, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("Response: ",response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsObjRequest);
     }
 
     public int predict(float[] x, float[][] w) {
-        float final_arr[] = {0,0,0,0};
+        float final_arr[] = {0,0,0};
 
         int j = 0;
         for (float[] w_row : w) {

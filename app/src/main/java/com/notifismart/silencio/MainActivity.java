@@ -25,6 +25,22 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.google.api.services.gmail.GmailScopes;
+
+import com.google.api.services.gmail.model.*;
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -103,9 +119,9 @@ public class MainActivity extends AppCompatActivity implements
         askForPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS,2);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.labels"))
-                .requestServerAuthCode(getString(R.string.server_client_id), false)
+                .requestScopes(new Scope("https://www.googleapis.com/auth/gmail.readonly"))
                 .build();
+//                .requestServerAuthCode(getString(R.string.server_client_id), false)
 //
 //        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestIdToken(getString(R.string.server_client_id))
@@ -194,8 +210,9 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            String authCode = acct.getServerAuthCode();
-            Log.d("TOKEN ###",authCode);
+//            String authCode = acct.getServerAuthCode();
+//            Log.d("TOKEN ###",authCode);
+
 
 //            HttpClient httpClient = new DefaultHttpClient();
 //            HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin");
@@ -216,12 +233,15 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 
             hideProgressDialog();
-            Intent intent = new Intent(this, StatusActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, authCode);
+//            Intent intent = new Intent(this, StatusActivity.class);
+            Intent intent = new Intent(this, GmailFetch.class);
+//            intent.putExtra(EXTRA_MESSAGE, authCode);
             startActivity(intent);
         }
 
     }
+
+
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
